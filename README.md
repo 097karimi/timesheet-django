@@ -1,5 +1,5 @@
 # timesheet-django
-***time sheet system for employee***
+***time sheet system for employees***
 
 # To Do
- - [] using bootstrap for templates
+ - [ ] using bootstrap for templates
