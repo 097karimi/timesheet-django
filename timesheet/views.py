@@ -5,7 +5,7 @@ from .models import TimesheetModel
 from django.contrib.auth.mixins import (
     LoginRequiredMixin, # To restrict view access to only logged in users
     UserPassesTestMixin # To restrict access
-) 
+)
 
 
 class TimesheetListView(LoginRequiredMixin, ListView):
@@ -17,7 +17,7 @@ class TimesheetListView(LoginRequiredMixin, ListView):
         if self.request.user.is_superuser:
             return super(TimesheetListView, self).get_queryset()
         return super(TimesheetListView, self).get_queryset().filter(author=self.request.user)
-    
+
 
 # Creating an article using 'article_new.html'
 class TimesheetCreateView(LoginRequiredMixin, CreateView): 
