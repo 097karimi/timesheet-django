@@ -1,22 +1,53 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>        
-        <h1>Timesheet</h1>
-        <ul>
-        {% for time in object_list %}
-            <li>{{ time.date|date }} - {{ time.author }} - {{ time.description }}</li>
-        {% empty %}
-            <li>No timesheet yet.</li>
-        {% endfor %}
-        </ul>
-        <script src=""></script>
-    </body>
-</html>
+<!-- templates/timesheet/overview_timesheet.html -->
+{% extends 'base.html' %} {% block content %}
+<table class="table">
+  <h1>Timesheet</h1>
+
+  {% if not user.is_superuser %}
+    <a href="{% url 'timesheet_view_create' %}" class="btn btn-success m-1 p-2">Create Today Record</a>
+  {% endif %}
+
+  {% if object_list.0.id and not user.is_superuser %}
+    <a href="/update/{{ object_list.0.id }}" class="btn btn-success m-1 p-2">Update Today Record</a>
+  {% endif %}
+  
+  <a href="accounts/logout" class="btn btn-success m-1 p-2">Log out</a>
+
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Date</th>
+      <th scope="col">User</th>
+      <th scope="col">Start Hour</th>
+      <th scope="col">End Hour</th>
+      <th scope="col">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for timesheet in object_list %}
+        <tr>
+        <th scope="row">{{ forloop.revcounter }}</th>
+        <td>{{ timesheet.date|date }}</td>
+        <td>{{ timesheet.author }}</td>
+        <td>{{ timesheet.from_hour }}</td>
+        <td>{{ timesheet.to_hour }}</td>
+        <td>{{ timesheet.description }}</td>
+        </tr>
+    {% endfor %}    
+  </tbody>
+</table>
+{# .... **The pagination section** .... #} {% if is_paginated %}
+<div class="pagination">
+  <span class="page-links">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+    {% endif %}
+    <span class="page-current">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+    </span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">next</a>
+    {% endif %}
+  </span>
+</div>
+{% endif %} {% endblock content %}

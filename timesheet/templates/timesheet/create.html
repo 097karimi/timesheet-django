@@ -1,9 +1,11 @@
 
 <!-- templates/timesheet/create.html -->
-{% extends 'base.html' %} {% block content %}
-<h1>New article</h1>
-<form action="" method="post">
-  {% csrf_token %} {{ form.as_p }}
-  <button class="btn btn-success ml-2" type="submit">Save</button>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>New Record</h1>
+<form action="{% url 'timesheet_view_create'  %}" method="post">
+  {% csrf_token %} {{ form|crispy }}
+  <input class="mt-2 btn btn-success ml-2" type="submit" value="Save">
 </form>
 {% endblock content %}

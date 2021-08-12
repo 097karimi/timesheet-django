@@ -1,0 +1,8 @@
+{%extends 'base.html'%}
+{%block content%}
+    {%if exception%}
+        <h1>{{exception}}</h1>
+    {%else%}
+        <h1>Somethings Wrong!</h1>
+    {%endif%}
+{%endblock%}
