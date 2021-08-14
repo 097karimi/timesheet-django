@@ -1,11 +1,19 @@
 <!-- templates/registration/login.html -->
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}<title>Log In</title>{% endblock title %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'timesheet/css/login.css' %}">
+{% endblock %}
 {% block content %}
-    <h2>Log In</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn btn-success ml-2" type="submit">Log In</button>
-    </form>
+<div class="login">
+    <div class="form">
+    <h4>DornaWing Members</h4>        
+        <form class="login-form" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">Log In</button>
+        </form>
+    </div>
+</div>
 {% endblock content %}

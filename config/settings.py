@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-8$*%4wua52apakqtakkw8+(v!l6sl*t%7b4p!16#*w@&*254j5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = ['*']
+    
 
 
 # Application definition
@@ -130,6 +134,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # To tell Lovely Django where to after log in or log out
 LOGIN_REDIRECT_URL = 'overview_timesheet' 

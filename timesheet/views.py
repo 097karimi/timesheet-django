@@ -8,6 +8,8 @@ from django.contrib.auth.mixins import (
 )
 from django.core.exceptions import PermissionDenied
 from datetime import datetime 
+from django.shortcuts import render
+from django.template import RequestContext
 
 
 class TimesheetListView(LoginRequiredMixin, ListView):
@@ -29,7 +31,9 @@ class TimesheetCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     
     # PermissionDenied for dublicated record
     def test_func(self):
-            if self.request.user.is_superuser:
+            if self.request.user.is_anonymous:
+                raise PermissionDenied("You are not authenticated! Please login first.")
+            elif self.request.user.is_superuser:
                 raise PermissionDenied("You don't have permission to create a new Timesheet")
             elif TimesheetModel.objects.filter(author=self.request.user, date=datetime.now()).exists():
                 raise PermissionDenied("You have set your timesheet today!, Please come back tomorrow.")
@@ -49,8 +53,16 @@ class TimesheetUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     # PermissionDenied for updating not exsisted record
     def test_func(self):
-            if TimesheetModel.objects.filter(date=datetime.now(),id=self.kwargs['pk'], author=self.request.user) :
+            if self.request.user.is_anonymous:
+                raise PermissionDenied("You are not authenticated! Please login first.")
+            elif TimesheetModel.objects.filter(date=datetime.now(),id=self.kwargs['pk'], author=self.request.user) :
                 return True
             else:
                 raise PermissionDenied("You are only able to update your current day record!, We are sorry for that.")
 
+
+def handler404(request):
+    response = render('404.html', {},
+                              context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
